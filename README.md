@@ -43,5 +43,5 @@ pingless	  -sS -Pn	      Ping 생략 스캔 (방화벽 우회)
 arp	          -PR -sn	      ARP Ping 스캔 (LAN 환경)
 
 ## 📝 License
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE.txt file for details.
 Copyright (c) 2025 KimJuhyeong95

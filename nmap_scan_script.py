@@ -145,7 +145,7 @@ def scan_target(target, ports, nmap_args="-sS"):
     output = run_nmap(target, ports, nmap_args)
     if output:
         open_ports = extract_open_ports(output)
-        result = f"\n[+] {target} - 열렸는 포트:\n" + "\n".join(open_ports) if open_ports else f"[!] {target} - 열렸는 포트 없음."
+        result = f"\n[+] {target} - 열린 포트:\n" + "\n".join(open_ports) if open_ports else f"[!] {target} - 열린 포트 없음."
 
         if "-sV" in nmap_args:
             services = extract_services(output)
@@ -170,7 +170,7 @@ def main():
     while True:
         target_input = input("스캔할 도메인/IP 또는 대역대 (콤마 구분 가능): ").strip()
         while True:
-            ports = input("스캔할 포트 (예: 1-65535 또는 22,80,443, 생방 가능): ").strip()
+            ports = input("스캔할 포트 (예: 1-65535 또는 22,80,443, 생략 가능): ").strip()
             if validate_ports(ports):
                 break
             print("[!] 유효하지 않은 포트 입력입니다. 0~65535 범위의 포트 번호를 입력하세요.")
@@ -182,7 +182,7 @@ def main():
         print(" - os        : OS 감지 전용 (-O)")
         print(" - udp       : UDP 포트 탐지 (-sU)")
         print(" - all       : TCP+UDP 병합 스캔 (-sS -sU)")
-        print(" - pingless  : Ping 생방 (-Pn)")
+        print(" - pingless  : Ping 생략 (-Pn)")
         print(" - arp       : ARP ping 사용 (-PR -sn)")
         mode = input("목록 선택: ").strip().lower()
 
@@ -207,7 +207,7 @@ def main():
             print("[!] 알 수 없는 목록입니다. 기본으로 빠른 스캔 진행.")
             nmap_args = "-T4 -F"
 
-        # 치환: 추가 업션 결합 검증 및 차례 처리
+        # 치환: 추가 옵션 결합 검증 및 차례 처리
         if ports and "-F" in nmap_args:
             print("[⚠️] 포트를 명시한 경우 '-F' 옵션은 사용할 수 없습니다. 해당 옵션은 자동 제거됩니다.")
             nmap_args = nmap_args.replace("-F", "").strip()
@@ -222,11 +222,11 @@ def main():
             nmap_args = nmap_args.replace("-sT", "").strip()
 
         if nmap_args.strip() == "-O":
-            print("[ℹ️] OS 탐지에는 TCP 포트 정보가 필요하무로 -sS 차례적 추가")
+            print("[ℹ️] OS 탐지에는 TCP 포트 정보가 필요하므로 -sS 추가")
             nmap_args += " -sS"
 
         if nmap_args.strip() == "-sU":
-            print("[ℹ️] UDP 스캔은 매우 느림니다. '-T4' 추가")
+            print("[ℹ️] UDP 스캔은 매우 느립니다. '-T4' 추가")
             nmap_args += " -T4"
 
         if "-F" in nmap_args and "-sU" in nmap_args:
@@ -245,7 +245,7 @@ def main():
         output = scan_multiple_targets(target_list, ports, nmap_args)
 
         if output:
-            print("\n[결과 요약 - 열렸는 포트 및 취약점]")
+            print("\n[결과 요약 - 열린 포트 및 취약점]")
             print(output)
             save_output_to_file(output)
 
